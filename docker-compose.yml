@@ -1,0 +1,21 @@
+version: "3.8"
+
+services:
+  vault-writer:
+    build: .
+    container_name: vault-writer
+    volumes:
+      # Mount your vault directory
+      - ./vault:/app/vault
+      # Optional: mount custom config
+      # - ./src/config.yaml:/app/src/config.yaml:ro
+    environment:
+      - VAULT_WRITER_VAULT_PATH=/app/vault
+    # For HTTP mode (accessible from host)
+    # command: ["fastmcp", "run", "src/vault_writer_server.py", "--port", "8000"]
+    # ports:
+    #   - "8000:8000"
+    
+    # Default: stdio mode (for MCP client via docker exec)
+    stdin_open: true
+    tty: true

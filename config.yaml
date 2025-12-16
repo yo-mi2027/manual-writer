@@ -1,0 +1,4 @@
+---
+# vault-writer 設定ファイル
+# 基本はリポジトリ直下の vault を使います。
+vault_path: "/Users/yo.mi/Projects/manual-writer/vault"
