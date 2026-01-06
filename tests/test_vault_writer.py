@@ -58,3 +58,30 @@ def test_ensure_manual_dirs(tmp_path, monkeypatch):
     bad = srv.ensure_manual_dirs("../escape")
     assert bad["success"] is False
     assert bad.get("error_code") == "invalid_manual"
+
+
+def test_write_file_extension_enforced(tmp_path, monkeypatch):
+    monkeypatch.setitem(srv.config, "vault_path", str(tmp_path))
+    res = srv.write_file("notes/example.txt", "body")
+    assert res["success"] is False
+    assert res.get("error_code") == "invalid_extension"
+
+
+def test_replace_text(tmp_path, monkeypatch):
+    monkeypatch.setitem(srv.config, "vault_path", str(tmp_path))
+
+    path = tmp_path / "notes"
+    path.mkdir(parents=True, exist_ok=True)
+    (path / "example.md").write_text("Hello world. Hello universe.", encoding="utf-8")
+
+    res = srv.replace_text("notes/example.md", "Hello", "Hi", max_replacements=1)
+    assert res["success"]
+    assert res["replacements"] == 1
+
+    text = (path / "example.md").read_text(encoding="utf-8")
+    assert text == "Hi world. Hello universe."
+
+    # No match -> error
+    res2 = srv.replace_text("notes/example.md", "Goodbye", "Bye")
+    assert res2["success"] is False
+    assert res2.get("error_code") == "no_matches"

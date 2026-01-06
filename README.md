@@ -1,6 +1,6 @@
 # vault-writer (FastMCP)
 
-手元の Obsidian vault（任意のテキストディレクトリ）に対して、MCP 経由で Markdown などのテキストを読み書きするための軽量サーバーです。機能はファイルの一覧・読み込み・書き込みのみに絞っています。
+手元の Obsidian vault（任意のテキストディレクトリ）に対して、MCP 経由で Markdown を読み書きするための軽量サーバーです。ファイルの一覧・読み込み・書き込みに加えて、部分置換とマニュアル用ディレクトリの生成をサポートします。
 
 ## Prerequisites
 - Python 3.11+
@@ -33,7 +33,8 @@ MCP クライアント側ではツールセット名 `vault-writer` を指定し
 ## Available tools
 - `list_dir(relative_dir=".")` : vault 内ディレクトリの一覧
 - `read_file(relative_path)` : vault 内の UTF-8 テキストを読み込み
-- `write_file(relative_path, content, create_dirs=True)` : vault 内に UTF-8 テキストを書き込み（上書き可、親ディレクトリ自動作成可）
+- `write_file(relative_path, content, create_dirs=True)` : vault 内に UTF-8 テキストを書き込み（上書き可、親ディレクトリ自動作成可、拡張子は .md のみ許可）
+- `replace_text(relative_path, find, replace, max_replacements=1)` : `.md` ファイル内の文字列を部分置換（デフォルトは最初の一致のみ）
 - `ensure_manual_dirs(manual)` : `<manual>/`, `<manual>/drafts`, `<manual>/diagrams`, `<manual>/tasks` をまとめて作成（既存ならそのまま）
 
 ## Notes
